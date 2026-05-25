@@ -1,6 +1,7 @@
 import socket
 import threading
 import time
+import os
 
 # =========================
 # Configuration
@@ -8,9 +9,9 @@ import time
 HOST = "127.0.0.1"
 PORT = 5000
 
-AUCTION_DURATION = 20
-MIN_INCREMENT = 50
-EXPECTED_CLIENTS = 3
+AUCTION_DURATION = int(os.environ.get("AUCTION_DURATION", 20))
+MIN_INCREMENT = int(os.environ.get("MIN_INCREMENT", 50))
+EXPECTED_CLIENTS = int(os.environ.get("EXPECTED_CLIENTS", 3))
 
 # =========================
 # Log
@@ -558,10 +559,10 @@ def auction_loop():
             final_price = current_price
 
         if winner is None:
-            broadcast(f"[SERVER] AUCTION_END " f"ITEM={item['name']} " f"WINNER=None")
+            broadcast(f"[SERVER] AUCTION_END ITEM={item['name']} WINNER=None PRICE={final_price}")
 
         else: 
-            broadcast(f"[SERVER] AUCTION_END " f"ITEM={item['name']} " f"WINNER={winner} " f"PRICE={final_price}")
+            broadcast(f"[SERVER] AUCTION_END ITEM={item['name']} WINNER={winner} PRICE={final_price}")
 
         time.sleep(1)
 
